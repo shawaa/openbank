@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+//using NewtonSoft.Json.Linq;
 
 namespace OpenBank.Application
 {
@@ -42,12 +43,12 @@ namespace OpenBank.Application
         public async Task<IEnumerable<UserDto>> GetAllUsers()
         {
             IEnumerable<UserDto> users = (await _userContext.Users
-                .Select(x => new { x.Id, x.Name, x.AccountNumber })
+                .Select(x => new { x.Id, x.Bank, x.AccountNumber })
                 .ToListAsync())
                 .Select(x => new UserDto
                 {
                     Id = x.Id.Value,
-                    Name = x.Name,
+                    Bank = x.Bank.ToString(),
                     AccountNumber = x.AccountNumber
                 });
 

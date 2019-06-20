@@ -6,7 +6,7 @@ namespace OpenBank.Application
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string Bank { get; set; }
 
         public string AccountNumber { get; set; }
     }

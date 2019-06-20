@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using OpenBank.Application;
 
 namespace OpenBank.Api.Controllers
@@ -13,9 +16,12 @@ namespace OpenBank.Api.Controllers
     {
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService)
+        private readonly IAccountDetailsService _accountDetailsService;
+
+        public UsersController(IUserService userService, IAccountDetailsService accountDetailsService)
         {
             _userService = userService;
+            _accountDetailsService = accountDetailsService;
         }
 
         // GET api/values
@@ -27,9 +33,16 @@ namespace OpenBank.Api.Controllers
 
         // GET api/values/5
         [HttpGet("{id}", Name = "GetUser")]
-        public ActionResult<CreateUserDto> Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return new CreateUserDto();
+            (UserDetailsDto dto, Error error) result = await _accountDetailsService.GetUserAccountDetails(id);
+
+            if (result.error != null)
+            {
+                return BadRequest(result.error);
+            }
+
+            return Ok(result.dto);
         }
 
         // POST api/values
