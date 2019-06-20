@@ -32,6 +32,7 @@ namespace OpenBank.Api
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAccountDetailsService, AccountDetailsService>();
             services.AddSingleton<IBankAccountService, BizFibankAccountDetailsService>();
+            services.AddSingleton<IBankAccountService, FairWayBankAccountDetailsService>();
             services.AddSingleton<IHttpClientWrapper, HttpClientWrapper>();
         }
 
