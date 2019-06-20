@@ -20,9 +20,9 @@ namespace OpenBank.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<CreateUserDto>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new[] { new CreateUserDto() };
+            return Ok(await _userService.GetAllUsers());
         }
 
         // GET api/values/5

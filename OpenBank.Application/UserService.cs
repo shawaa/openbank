@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +34,24 @@ namespace OpenBank.Application
             }
 
             await _userContext.AddAsync(userResult.user);
+            await _userContext.SaveChangesAsync();
 
             return (userResult.user, null);
+        }
+
+        public async Task<IEnumerable<UserDto>> GetAllUsers()
+        {
+            IEnumerable<UserDto> users = (await _userContext.Users
+                .Select(x => new { x.Id, x.Name, x.AccountNumber })
+                .ToListAsync())
+                .Select(x => new UserDto
+                {
+                    Id = x.Id.Value,
+                    Name = x.Name,
+                    AccountNumber = x.AccountNumber
+                });
+
+            return users;
         }
     }
 }
