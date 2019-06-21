@@ -24,14 +24,12 @@ namespace OpenBank.Api.Controllers
             _accountDetailsService = accountDetailsService;
         }
 
-        // GET api/values
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
-        // GET api/values/5
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -58,7 +56,6 @@ namespace OpenBank.Api.Controllers
             return Ok(result.transactions);
         }
 
-        // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserDto user)
         {
@@ -73,18 +70,6 @@ namespace OpenBank.Api.Controllers
                 routeName: "GetUser",
                 routeValues: new { id = result.user.Id },
                 value: result.user);
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
