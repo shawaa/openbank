@@ -29,5 +29,17 @@ namespace OpenBank.Application
 
             return await _bankAccountServices.Single(x => x.Bank == user.Bank).GetUserDetails(user.AccountNumber);
         }
+
+        public async Task<(IEnumerable<TransactionDto> transactions, Error error)> GetTransactions(Guid id)
+        {
+            User user = await _userContext.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+            if (user == null)
+            {
+                return (null, new Error($"User id {id} was not found"));
+            }
+
+            return await _bankAccountServices.Single(x => x.Bank == user.Bank).GetTransactions(user.AccountNumber);
+        }
     }
 }

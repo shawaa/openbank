@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
@@ -13,6 +16,25 @@ namespace OpenBank.Application
         }
 
         public Banks Bank => Banks.FairWayBank;
+
+        public async Task<(IEnumerable<TransactionDto> transactions, Error error)> GetTransactions(string accountNumber)
+        {
+            JToken transactionsJobject = JToken.Parse((await _httpClientWrapper.Get($"http://fairwaybank-bizfitech.azurewebsites.net/api/v1/accounts/{accountNumber}/transactions")));
+
+            if (transactionsJobject is JObject)
+            {
+                return (null, new Error(transactionsJobject.Value<string>("message")));
+            }
+
+            var transactions = ((JArray)transactionsJobject).Select(x => new TransactionDto
+            {
+                Amount = x.Value<decimal>("amount") * (x.Value<string>("type") == "Credit" ? 1 : -1),
+                ClearedDate = x.Value<DateTime>("bookedDate"),
+                Merchant = x.Value<string>("transactionInformation")
+            });
+
+            return (transactions, null);
+        }
 
         public async Task<(UserDetailsDto dto, Error error)> GetUserDetails(string accountNumber)
         {

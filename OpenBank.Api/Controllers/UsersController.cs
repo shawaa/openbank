@@ -45,6 +45,19 @@ namespace OpenBank.Api.Controllers
             return Ok(result.dto);
         }
 
+        [HttpGet("{id}/transactions")]
+        public async Task<IActionResult> GetTransactions(Guid id)
+        {
+            (IEnumerable<TransactionDto> transactions, Error error) result = await _accountDetailsService.GetTransactions(id);
+
+            if (result.error != null)
+            {
+                return BadRequest(result.error);
+            }
+
+            return Ok(result.transactions);
+        }
+
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateUserDto user)
