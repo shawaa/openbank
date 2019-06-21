@@ -54,11 +54,11 @@ namespace OpenBank.Application
             UserDetailsDto dto = new UserDetailsDto
             {
                 AccountName = accountJobject.Value<string>("name"),
-                AccountNumber = accountJobject.Value<string>("identifier.accountNumber"),
-                SortCode = accountJobject.Value<string>("identifier.accountNumber"),
+                AccountNumber = (string)accountJobject.SelectToken("identifier.accountNumber"),
+                SortCode = (string)accountJobject.SelectToken("identifier.accountNumber"),
                 Balance = balanceJobject.Value<decimal>("amount"),
                 AvailableBalance = availableBalance,
-                Overdraft = balanceJobject.Value<decimal?>("overdraft.amount")
+                Overdraft = (decimal?)balanceJobject.SelectToken("overdraft.amount")
             };
 
             return (dto, null);
