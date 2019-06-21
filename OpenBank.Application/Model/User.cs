@@ -28,6 +28,11 @@ namespace OpenBank.Application
                 return (null, new Error("account number must not start with 0"));
             }
 
+            if (!int.TryParse(dto.AccountNumber, out int _))
+            {
+                return (null, new Error("account number must be digits only"));
+            }
+
             Banks bank;
 
             if (!Enum.TryParse(dto.Bank, out bank))
